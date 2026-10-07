@@ -46,7 +46,8 @@ function db(): PDO
     // Com DATABASE_URL (por exemplo, Neon na Vercel) usa Postgres; senão, SQLite em arquivo.
     $url = getenv('DATABASE_URL') ?: getenv('POSTGRES_URL');
     if ($url) {
-        $pdo = new PDO(postgres_dsn($url), null, null, $options);
+        // O pooler do Neon (PgBouncer) não guarda consultas preparadas entre transações.
+        $pdo = new PDO(postgres_dsn($url), null, null, $options + [PDO::ATTR_EMULATE_PREPARES => true]);
         $id = 'id SERIAL PRIMARY KEY';
     } else {
         $path = getenv('INGLES_DB_PATH') ?: __DIR__ . '/../data/ingles.sqlite';
