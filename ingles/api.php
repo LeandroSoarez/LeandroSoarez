@@ -71,7 +71,7 @@ function user_state(array $user): array
 
 function award(array $user, string $code): bool
 {
-    $stmt = db()->prepare('INSERT OR IGNORE INTO achievements (user_id, code) VALUES (?, ?)');
+    $stmt = db()->prepare('INSERT INTO achievements (user_id, code) VALUES (?, ?) ON CONFLICT DO NOTHING');
     $stmt->execute([$user['id'], $code]);
     return $stmt->rowCount() > 0;
 }
@@ -129,12 +129,13 @@ try {
             if ($user['last_day'] !== $today) {
                 $streak = $user['last_day'] === date('Y-m-d', strtotime('-1 day')) ? $streak + 1 : 1;
             }
-            $pdo->prepare('UPDATE users SET xp = xp + ?, streak = ?, best_streak = MAX(best_streak, ?), last_day = ? WHERE id = ?')
-                ->execute([$xp, $streak, $streak, $today, $user['id']]);
+            $pdo->prepare('UPDATE users SET xp = xp + ?, streak = ?, best_streak = ?, last_day = ? WHERE id = ?')
+                ->execute([$xp, $streak, max((int) $user['best_streak'], $streak), $today, $user['id']]);
 
             $pdo->prepare('INSERT INTO progress (user_id, lesson_id, best_score, total) VALUES (?, ?, ?, ?)
-                ON CONFLICT(user_id, lesson_id) DO UPDATE SET best_score = MAX(best_score, excluded.best_score),
-                total = excluded.total, attempts = attempts + 1, updated_at = CURRENT_TIMESTAMP')
+                ON CONFLICT (user_id, lesson_id) DO UPDATE SET
+                best_score = CASE WHEN excluded.best_score > progress.best_score THEN excluded.best_score ELSE progress.best_score END,
+                total = excluded.total, attempts = progress.attempts + 1, updated_at = CURRENT_TIMESTAMP')
                 ->execute([$user['id'], $lessonId, $score, $total]);
 
             $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
@@ -194,12 +195,12 @@ try {
 
             $pdo = db();
             $pdo->beginTransaction();
-            $pdo->prepare('INSERT INTO users (name, token, xp, streak, best_streak, last_day) VALUES (?, ?, ?, ?, ?, ?)')
-                ->execute([$name, $token, $xp, $streak, $bestStreak, $lastDay]);
-            $id = (int) $pdo->lastInsertId();
+            $stmt = $pdo->prepare('INSERT INTO users (name, token, xp, streak, best_streak, last_day) VALUES (?, ?, ?, ?, ?, ?) RETURNING id');
+            $stmt->execute([$name, $token, $xp, $streak, $bestStreak, $lastDay]);
+            $id = (int) $stmt->fetchColumn();
             $ins = $pdo->prepare('INSERT INTO progress (user_id, lesson_id, best_score, total) VALUES (?, ?, ?, ?)');
             foreach ($progress as $lessonId => [$best, $total]) $ins->execute([$id, $lessonId, $best, $total]);
-            $ins = $pdo->prepare('INSERT OR IGNORE INTO achievements (user_id, code) VALUES (?, ?)');
+            $ins = $pdo->prepare('INSERT INTO achievements (user_id, code) VALUES (?, ?) ON CONFLICT DO NOTHING');
             foreach ($codes as $code) $ins->execute([$id, $code]);
             $pdo->commit();
 

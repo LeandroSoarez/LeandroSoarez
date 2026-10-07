@@ -39,18 +39,27 @@ function db(): PDO
     if ($pdo !== null) {
         return $pdo;
     }
-    $path = getenv('INGLES_DB_PATH') ?: __DIR__ . '/../data/ingles.sqlite';
-    if (!is_writable(dirname($path))) {
-        // Hospedagens sem disco gravável (como a Vercel) só permitem gravar na pasta temporária.
-        $path = sys_get_temp_dir() . '/ingles.sqlite';
-    }
-    $pdo = new PDO('sqlite:' . $path, null, null, [
+    $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]);
-    $pdo->exec('PRAGMA foreign_keys = ON');
-    $pdo->exec('CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ];
+    // Com DATABASE_URL (por exemplo, Neon na Vercel) usa Postgres; senão, SQLite em arquivo.
+    $url = getenv('DATABASE_URL') ?: getenv('POSTGRES_URL');
+    if ($url) {
+        $pdo = new PDO(postgres_dsn($url), null, null, $options);
+        $id = 'id SERIAL PRIMARY KEY';
+    } else {
+        $path = getenv('INGLES_DB_PATH') ?: __DIR__ . '/../data/ingles.sqlite';
+        if (!is_writable(dirname($path))) {
+            // Hospedagens sem disco gravável (como a Vercel) só permitem gravar na pasta temporária.
+            $path = sys_get_temp_dir() . '/ingles.sqlite';
+        }
+        $pdo = new PDO('sqlite:' . $path, null, null, $options);
+        $pdo->exec('PRAGMA foreign_keys = ON');
+        $id = 'id INTEGER PRIMARY KEY AUTOINCREMENT';
+    }
+    $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+        $id,
         name TEXT NOT NULL,
         token TEXT NOT NULL UNIQUE,
         xp INTEGER NOT NULL DEFAULT 0,
@@ -58,7 +67,7 @@ function db(): PDO
         best_streak INTEGER NOT NULL DEFAULT 0,
         last_day TEXT,
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    )');
+    )");
     $pdo->exec('CREATE TABLE IF NOT EXISTS progress (
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         lesson_id TEXT NOT NULL,
@@ -75,6 +84,31 @@ function db(): PDO
         PRIMARY KEY (user_id, code)
     )');
     return $pdo;
+}
+
+/** Converte postgres://usuario:senha@host:porta/banco?sslmode=require em DSN do PDO. */
+function postgres_dsn(string $url): string
+{
+    $parts = parse_url($url);
+    if (!$parts || empty($parts['host'])) {
+        throw new RuntimeException('DATABASE_URL inválida.');
+    }
+    parse_str($parts['query'] ?? '', $query);
+    $dsn = sprintf(
+        'pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s;sslmode=%s',
+        $parts['host'],
+        $parts['port'] ?? 5432,
+        ltrim($parts['path'] ?? '/postgres', '/'),
+        rawurldecode($parts['user'] ?? ''),
+        rawurldecode($parts['pass'] ?? ''),
+        $query['sslmode'] ?? 'require'
+    );
+    // O Neon identifica o banco pelo nome do host; isso ajuda clientes sem suporte a SNI.
+    if (str_ends_with($parts['host'], '.neon.tech')) {
+        $endpoint = preg_replace('/-pooler$/', '', explode('.', $parts['host'])[0]);
+        $dsn .= ";options='endpoint=$endpoint'";
+    }
+    return $dsn;
 }
 
 /** Catálogo de conquistas (as mesmas regras existem em js/app.js para o modo offline). */

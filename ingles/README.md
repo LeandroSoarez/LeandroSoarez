@@ -46,6 +46,6 @@ Para adicionar ou editar lições, basta mudar `data/levels.json`.
 
 O site está publicado na **Vercel**, usando o runtime da comunidade [`vercel-php`](https://github.com/vercel-community/php) (PHP 8.5). O arquivo `vercel.json` manda a página para `api/index.php` e a API para `api/api.php`, e bloqueia o acesso às pastas `data/` e `lib/`.
 
-Na Vercel não existe disco permanente, então o banco SQLite fica na pasta temporária e pode ser apagado quando o servidor reinicia. Para ninguém perder progresso, o navegador guarda uma cópia da conta e a recria sozinho no servidor quando isso acontece. Por causa disso, o ranking mostra só quem estudou desde o último reinício. Para guardar tudo de forma permanente, o próximo passo é ligar um banco Postgres (por exemplo, o Neon, que tem plano gratuito na Vercel).
+**Banco de dados:** se a variável `DATABASE_URL` (ou `POSTGRES_URL`) existir, o site usa **Postgres** (por exemplo, o Neon da Vercel) e guarda tudo de forma permanente. Sem ela, usa **SQLite**. Na Vercel não existe disco permanente, então o SQLite fica na pasta temporária e pode ser apagado quando o servidor reinicia. Nesse caso, o navegador guarda uma cópia da conta e a recria sozinho no servidor.
 
 Também funciona em qualquer hospedagem comum com PHP 8 e SQLite. Em servidores Apache, os arquivos `.htaccess` bloqueiam o acesso direto às pastas `data/` e `lib/`. Em Nginx, bloqueie essas pastas na configuração do servidor.
