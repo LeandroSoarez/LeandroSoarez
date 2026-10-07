@@ -1,0 +1,91 @@
+<?php
+// Configuração compartilhada: conteúdo do curso, banco de dados e regras de XP.
+declare(strict_types=1);
+
+date_default_timezone_set('America/Sao_Paulo');
+
+const PASS_RATIO = 0.7;
+const EXTRA_EXERCISES = 4; // montar frase, ligar pares, ouvir e digitar (além do quiz)
+
+function levels(): array
+{
+    static $levels = null;
+    if ($levels === null) {
+        $levels = json_decode(file_get_contents(__DIR__ . '/../data/levels.json'), true, 512, JSON_THROW_ON_ERROR);
+    }
+    return $levels;
+}
+
+function lesson_total(array $lesson): int
+{
+    return count($lesson['quiz']) + EXTRA_EXERCISES;
+}
+
+/** @return array<string, array{lesson: array, level: array}> */
+function lessons_by_id(): array
+{
+    $map = [];
+    foreach (levels() as $level) {
+        foreach ($level['lessons'] as $lesson) {
+            $map[$lesson['id']] = ['lesson' => $lesson, 'level' => $level];
+        }
+    }
+    return $map;
+}
+
+function db(): PDO
+{
+    static $pdo = null;
+    if ($pdo !== null) {
+        return $pdo;
+    }
+    $path = getenv('INGLES_DB_PATH') ?: __DIR__ . '/../data/ingles.sqlite';
+    $pdo = new PDO('sqlite:' . $path, null, null, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+    $pdo->exec('PRAGMA foreign_keys = ON');
+    $pdo->exec('CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        token TEXT NOT NULL UNIQUE,
+        xp INTEGER NOT NULL DEFAULT 0,
+        streak INTEGER NOT NULL DEFAULT 0,
+        best_streak INTEGER NOT NULL DEFAULT 0,
+        last_day TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )');
+    $pdo->exec('CREATE TABLE IF NOT EXISTS progress (
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        lesson_id TEXT NOT NULL,
+        best_score INTEGER NOT NULL,
+        total INTEGER NOT NULL,
+        attempts INTEGER NOT NULL DEFAULT 1,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, lesson_id)
+    )');
+    $pdo->exec('CREATE TABLE IF NOT EXISTS achievements (
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        code TEXT NOT NULL,
+        earned_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, code)
+    )');
+    return $pdo;
+}
+
+/** Catálogo de conquistas (as mesmas regras existem em js/app.js para o modo offline). */
+function achievement_catalog(): array
+{
+    $list = [
+        'first_lesson' => ['🎯', 'Primeiro passo', 'Conclua sua primeira lição'],
+        'perfect'      => ['💯', 'Perfeccionista', 'Acerte 100% em uma lição'],
+        'streak_3'     => ['🔥', 'Pegando fogo', 'Estude 3 dias seguidos'],
+        'streak_7'     => ['🌋', 'Imparável', 'Estude 7 dias seguidos'],
+        'xp_500'       => ['⚡', 'Energia total', 'Junte 500 XP'],
+        'xp_2000'      => ['🌟', 'Estrela', 'Junte 2000 XP'],
+    ];
+    foreach (levels() as $level) {
+        $list['level_' . $level['id']] = [$level['icon'], 'Nível ' . $level['code'], 'Conclua todas as lições do ' . $level['code']];
+    }
+    return $list;
+}
