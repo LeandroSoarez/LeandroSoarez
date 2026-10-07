@@ -4,7 +4,7 @@ Site para aprender inglês nível por nível, do **A1 (iniciante)** ao **C2 (pro
 
 ## O que tem
 
-- **Trilha de lições**: 6 níveis e 18 lições. Cada lição libera a próxima, e cada nível concluído libera o seguinte.
+- **Trilha de lições**: 26 níveis e 78 lições, divididos nas faixas A1, A2, B1, B2, C1 e C2 (por exemplo, A1.1 até A1.5). Cada lição libera a próxima, e cada nível concluído libera o seguinte.
 - **5 tipos de exercício por lição**: múltipla escolha, ouvir e escolher, montar a frase, ligar pares e escrever a palavra.
 - **Áudio e voz**: botão 🔊 para ouvir a pronúncia e 🎤 para treinar a fala (o reconhecimento de voz funciona no Chrome).
 - **Gamificação**: XP, sequência de dias 🔥, conquistas, ranking, combo de acertos e confete ao concluir.

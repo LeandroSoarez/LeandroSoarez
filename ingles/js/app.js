@@ -197,6 +197,12 @@ function confetti() {
 const ALL_LESSONS = LEVELS.flatMap((level, levelIndex) =>
   level.lessons.map((lesson, lessonIndex) => ({ level, levelIndex, lesson, lessonIndex })));
 
+// Faixas do CEFR (A1 a C2), cada uma com seus subníveis.
+const BANDS = LEVELS.reduce((list, level) => {
+  if (!list.some(b => b.band === level.band)) list.push({ band: level.band, name: level.bandName, color: level.color });
+  return list;
+}, []);
+
 const lessonTotal = lesson => lesson.quiz.length + EXTRA_EXERCISES;
 const findLesson = id => ALL_LESSONS.find(f => f.lesson.id === id) || null;
 
@@ -347,9 +353,9 @@ function renderOnboarding(note = "") {
     <section class="welcome">
       <div class="mascot" aria-hidden="true">🦉</div>
       <h1>Aprenda inglês do zero à fluência</h1>
-      <p class="lead">6 níveis, ${ALL_LESSONS.length} lições, exercícios interativos, áudio e reconhecimento de voz. Tudo explicado em português.</p>
+      <p class="lead">${LEVELS.length} níveis, ${ALL_LESSONS.length} lições, exercícios interativos, áudio e reconhecimento de voz. Tudo explicado em português.</p>
       <ul class="pills">
-        ${LEVELS.map(l => `<li style="--c:${l.color}">${l.icon} ${l.code}</li>`).join("")}
+        ${BANDS.map(b => `<li style="--c:${b.color}" title="${esc(b.name)}">${b.band}</li>`).join("")}
       </ul>
       ${note ? `<p class="notice">${note}</p>` : ""}
       <form id="join" class="card join">
@@ -434,6 +440,12 @@ function renderHome() {
   const offsets = [0, 64, 0, -64];
   let n = 0;
 
+  BANDS.forEach(b => {
+    const levels = LEVELS.filter(l => l.band === b.band);
+    const lessons = levels.flatMap(l => l.lessons);
+    Object.assign(b, { levels: levels.length, lessons: lessons.length, done: lessons.filter(isPassed).length });
+  });
+
   const units = LEVELS.map((level, levelIndex) => {
     const { done: lvDone, total } = levelProgress(level);
     const nodes = level.lessons.map((lesson, lessonIndex) => {
@@ -453,12 +465,19 @@ function renderHome() {
     }).join("");
 
     const unitLocked = !isUnlocked({ levelIndex, lessonIndex: 0 });
-    return `
+    const firstOfBand = levelIndex === 0 || LEVELS[levelIndex - 1].band !== level.band;
+    const band = BANDS.find(b => b.band === level.band);
+    const bandHead = firstOfBand ? `
+      <div class="band-head" style="--c:${level.color}">
+        <span class="band-code">${level.band}</span>
+        <div><b>${esc(level.bandName)}</b><small>${band.levels} níveis · ${band.done}/${band.lessons} lições concluídas</small></div>
+      </div>` : "";
+    return `${bandHead}
       <section class="unit ${unitLocked ? "locked" : ""}" style="--c:${level.color}">
         <header class="unit-head">
           <div class="unit-icon">${level.icon}</div>
           <div class="unit-text">
-            <span class="unit-code">Nível ${level.code}</span>
+            <span class="unit-code">Nível ${level.code} · ${esc(level.bandName)}</span>
             <h2>${esc(level.name)}</h2>
             <p>${esc(level.description)}</p>
           </div>

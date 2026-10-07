@@ -263,6 +263,12 @@ h1 { font-size: 1.8rem; margin: 0 0 8px; }
 .ring-fg { stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 1s ease; }
 .ring text { font-weight: 900; font-size: 17px; fill: var(--text); }
 
+.band-head { display: flex; align-items: center; gap: 12px; margin: 44px 0 16px; }
+.band-head:first-of-type { margin-top: 8px; }
+.band-code { font-size: 1.6rem; font-weight: 900; color: var(--c); min-width: 56px; }
+.band-head b { display: block; font-size: 1.15rem; font-weight: 900; line-height: 1.2; }
+.band-head small { color: var(--muted); font-weight: 700; }
+.band-head::after { content: ""; flex: 1; height: 3px; border-radius: 3px; background: color-mix(in srgb, var(--c) 30%, transparent); }
 .unit { margin-bottom: 36px; }
 .unit-head {
   display: flex;
