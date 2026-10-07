@@ -2,6 +2,24 @@
 declare(strict_types=1);
 
 require __DIR__ . '/lib/bootstrap.php';
+require __DIR__ . '/lib/gate.php';
+
+header('X-Robots-Tag: noindex, nofollow');
+
+if (!site_unlocked()) {
+    $gateError = '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (site_unlock((string) ($_POST['senha'] ?? ''))) {
+            header('Location: /', true, 303);
+            exit;
+        }
+        sleep(1); // atrasa tentativas de adivinhar a senha
+        $gateError = 'Senha incorreta.';
+    }
+    header('Cache-Control: no-store');
+    require __DIR__ . '/lib/gate_page.php';
+    exit;
+}
 
 $levels = levels();
 $lessonCount = array_sum(array_map(fn($l) => count($l['lessons']), $levels));
@@ -19,6 +37,7 @@ $config = [
   <title>Inglês Passo a Passo</title>
   <meta name="description" content="Aprenda inglês nível por nível, do A1 ao C2: <?= $lessonCount ?> lições com explicação em português, áudio, exercícios interativos, XP e ranking.">
   <meta name="theme-color" content="#3b82f6">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

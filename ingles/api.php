@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/lib/bootstrap.php';
+require __DIR__ . '/lib/gate.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -74,6 +75,10 @@ function award(array $user, string $code): bool
     $stmt = db()->prepare('INSERT INTO achievements (user_id, code) VALUES (?, ?) ON CONFLICT DO NOTHING');
     $stmt->execute([$user['id'], $code]);
     return $stmt->rowCount() > 0;
+}
+
+if (!site_unlocked()) {
+    respond(['error' => 'Site protegido por senha.'], 403);
 }
 
 $action = $_GET['action'] ?? '';

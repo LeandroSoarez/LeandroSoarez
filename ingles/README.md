@@ -2,7 +2,7 @@
 
 Site para aprender inglês nível por nível, do **A1 (iniciante)** ao **C2 (proficiente)**, com explicações em português.
 
-**No ar:** https://ingles-passo-a-passo-three.vercel.app
+**No ar:** https://ingles-passo-a-passo-three.vercel.app (site particular, protegido por senha)
 
 ## O que tem
 
@@ -13,6 +13,7 @@ Site para aprender inglês nível por nível, do **A1 (iniciante)** ao **C2 (pro
 - **Conta sem senha**: a pessoa escolhe um nome e recebe um código de acesso para entrar em outro aparelho.
 - **Modo offline**: se o PHP não responder, o progresso fica salvo no navegador.
 - Funciona no celular e tem modo escuro automático.
+- **Senha de entrada**: com a variável `SITE_PASSWORD` definida, o site e a API só funcionam depois de digitar a senha. O navegador lembra por 1 ano. Sem a variável, o site fica aberto.
 - **Painel de progresso** em `/painel`, protegido pela senha da variável `ADMIN_PASSWORD`: mostra lições concluídas, XP, sequência, taxa de acertos, calendário de dias de estudo, progresso por nível, histórico das lições feitas e conquistas.
 
 ## Tecnologias
