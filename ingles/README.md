@@ -2,6 +2,8 @@
 
 Site para aprender inglês nível por nível, do **A1 (iniciante)** ao **C2 (proficiente)**, com explicações em português.
 
+**No ar:** https://ingles-passo-a-passo-three.vercel.app
+
 ## O que tem
 
 - **Trilha de lições**: 26 níveis e 78 lições, divididos nas faixas A1, A2, B1, B2, C1 e C2 (por exemplo, A1.1 até A1.5). Cada lição libera a próxima, e cada nível concluído libera o seguinte.
@@ -42,6 +44,8 @@ Para adicionar ou editar lições, basta mudar `data/levels.json`.
 
 ## Hospedagem
 
-Precisa de uma hospedagem com PHP 8 e SQLite (a maioria das hospedagens PHP comuns tem). A Vercel não roda PHP por padrão.
+O site está publicado na **Vercel**, usando o runtime da comunidade [`vercel-php`](https://github.com/vercel-community/php) (PHP 8.5). O arquivo `vercel.json` manda a página para `api/index.php` e a API para `api/api.php`, e bloqueia o acesso às pastas `data/` e `lib/`.
 
-Em servidores Apache, os arquivos `.htaccess` bloqueiam o acesso direto às pastas `data/` e `lib/`. Em Nginx, bloqueie essas pastas na configuração do servidor.
+Na Vercel não existe disco permanente, então o banco SQLite fica na pasta temporária e pode ser apagado quando o servidor reinicia. Para ninguém perder progresso, o navegador guarda uma cópia da conta e a recria sozinho no servidor quando isso acontece. Por causa disso, o ranking mostra só quem estudou desde o último reinício. Para guardar tudo de forma permanente, o próximo passo é ligar um banco Postgres (por exemplo, o Neon, que tem plano gratuito na Vercel).
+
+Também funciona em qualquer hospedagem comum com PHP 8 e SQLite. Em servidores Apache, os arquivos `.htaccess` bloqueiam o acesso direto às pastas `data/` e `lib/`. Em Nginx, bloqueie essas pastas na configuração do servidor.
