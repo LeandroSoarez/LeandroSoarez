@@ -1,0 +1,612 @@
+// Conteúdo do curso: níveis do mais fácil (A1) ao mais complexo (C2).
+// Cada lição tem explicação, vocabulário, exemplos e um quiz.
+const LEVELS = [
+  {
+    id: "a1",
+    code: "A1",
+    name: "Iniciante",
+    description: "Primeiros passos: cumprimentos, verbo to be, artigos e plurais.",
+    lessons: [
+      {
+        id: "a1-saudacoes",
+        title: "Cumprimentos e apresentações",
+        theory: `
+          <p>Os cumprimentos mudam conforme a hora do dia e o nível de formalidade.</p>
+          <ul>
+            <li><b>Hello / Hi</b> – Olá / Oi (Hi é mais informal)</li>
+            <li><b>Good morning</b> – Bom dia (até meio-dia)</li>
+            <li><b>Good afternoon</b> – Boa tarde</li>
+            <li><b>Good evening</b> – Boa noite (ao chegar)</li>
+            <li><b>Good night</b> – Boa noite (ao se despedir ou ir dormir)</li>
+          </ul>
+          <p>Para se apresentar:</p>
+          <ul>
+            <li><b>My name is ...</b> / <b>I'm ...</b> – Meu nome é ... / Eu sou ...</li>
+            <li><b>What's your name?</b> – Qual é o seu nome?</li>
+            <li><b>Nice to meet you.</b> – Prazer em conhecer você.</li>
+            <li><b>How are you?</b> – <i>I'm fine, thanks. And you?</i></li>
+          </ul>`,
+        vocab: [
+          ["hello", "olá"], ["goodbye", "tchau / adeus"], ["please", "por favor"],
+          ["thank you", "obrigado(a)"], ["you're welcome", "de nada"], ["sorry", "desculpe"],
+          ["excuse me", "com licença"], ["see you later", "até mais"]
+        ],
+        examples: [
+          ["Hi! My name is Ana. What's your name?", "Oi! Meu nome é Ana. Qual é o seu nome?"],
+          ["Nice to meet you, Paulo.", "Prazer em te conhecer, Paulo."],
+          ["Good night! See you tomorrow.", "Boa noite! Até amanhã."]
+        ],
+        quiz: [
+          { q: "Como dizer “Bom dia” em inglês?", options: ["Good night", "Good morning", "Good evening", "Good afternoon"], answer: 1, explain: "Good morning é usado pela manhã." },
+          { q: "Você está indo dormir. O que diz?", options: ["Good evening", "Hello", "Good night", "Good afternoon"], answer: 2, explain: "Good night é usado na despedida ou antes de dormir." },
+          { q: "Complete: “Nice to ___ you.”", options: ["see", "know", "meet", "met"], answer: 2, explain: "A expressão fixa é “Nice to meet you”." },
+          { q: "Qual a resposta adequada para “Thank you”?", options: ["Sorry", "You're welcome", "Excuse me", "Please"], answer: 1, explain: "You're welcome = de nada." },
+          { q: "“What's your name?” significa:", options: ["Como você está?", "De onde você é?", "Qual é o seu nome?", "Quantos anos você tem?"], answer: 2, explain: "Name = nome." }
+        ]
+      },
+      {
+        id: "a1-to-be",
+        title: "Verbo To Be (ser / estar)",
+        theory: `
+          <p>O verbo <b>to be</b> significa <i>ser</i> ou <i>estar</i>. No presente ele tem três formas: <b>am, is, are</b>.</p>
+          <table>
+            <tr><th>Afirmativa</th><th>Contração</th></tr>
+            <tr><td>I am</td><td>I'm</td></tr>
+            <tr><td>You are</td><td>You're</td></tr>
+            <tr><td>He / She / It is</td><td>He's / She's / It's</td></tr>
+            <tr><td>We / They are</td><td>We're / They're</td></tr>
+          </table>
+          <p><b>Negativa:</b> coloque <b>not</b> depois do verbo → <i>I am not, she is not (isn't), they are not (aren't)</i>.</p>
+          <p><b>Pergunta:</b> inverta a ordem → <i>Are you happy? Is he a teacher?</i></p>`,
+        vocab: [
+          ["happy", "feliz"], ["tired", "cansado"], ["teacher", "professor(a)"], ["student", "estudante"],
+          ["friend", "amigo(a)"], ["hungry", "com fome"], ["busy", "ocupado"], ["ready", "pronto"]
+        ],
+        examples: [
+          ["I am a student.", "Eu sou estudante."],
+          ["She isn't tired.", "Ela não está cansada."],
+          ["Are they your friends?", "Eles são seus amigos?"]
+        ],
+        quiz: [
+          { q: "She ___ a teacher.", options: ["am", "is", "are", "be"], answer: 1, explain: "He/She/It usa is." },
+          { q: "We ___ hungry.", options: ["is", "am", "are", "be"], answer: 2, explain: "We/You/They usam are." },
+          { q: "Qual a contração de “I am”?", options: ["I'am", "Im", "I'm", "I's"], answer: 2, explain: "O apóstrofo substitui o “a”: I'm." },
+          { q: "Como fica a pergunta de “You are ready”?", options: ["You are ready?", "Are you ready?", "Ready you are?", "Is you ready?"], answer: 1, explain: "Na pergunta o verbo vem antes do sujeito." },
+          { q: "Negativa de “He is busy”:", options: ["He not is busy.", "He isn't busy.", "He don't busy.", "He aren't busy."], answer: 1, explain: "is + not = isn't." }
+        ]
+      },
+      {
+        id: "a1-artigos",
+        title: "Artigos (a, an, the) e plurais",
+        theory: `
+          <p><b>A / An</b> = um, uma (para uma coisa não específica).</p>
+          <ul>
+            <li><b>a</b> antes de <i>som</i> de consoante: a book, a car, <b>a university</b> (som de “iu”)</li>
+            <li><b>an</b> antes de <i>som</i> de vogal: an apple, an egg, <b>an hour</b> (o h é mudo)</li>
+          </ul>
+          <p><b>The</b> = o, a, os, as (algo específico, já conhecido).</p>
+          <p><b>Plural:</b> normalmente acrescente <b>-s</b> (cat → cats). Palavras terminadas em s, sh, ch, x, o recebem <b>-es</b> (box → boxes). Consoante + y vira <b>-ies</b> (city → cities).</p>
+          <p>Alguns plurais irregulares: man → <b>men</b>, woman → <b>women</b>, child → <b>children</b>, foot → <b>feet</b>, person → <b>people</b>.</p>`,
+        vocab: [
+          ["apple", "maçã"], ["book", "livro"], ["house", "casa"], ["child / children", "criança / crianças"],
+          ["city", "cidade"], ["hour", "hora"], ["box", "caixa"], ["people", "pessoas"]
+        ],
+        examples: [
+          ["I have an apple and a banana.", "Eu tenho uma maçã e uma banana."],
+          ["The children are in the house.", "As crianças estão na casa."],
+          ["There are many cities in Brazil.", "Há muitas cidades no Brasil."]
+        ],
+        quiz: [
+          { q: "I need ___ umbrella.", options: ["a", "an", "the", "—"], answer: 1, explain: "Umbrella começa com som de vogal." },
+          { q: "She studies at ___ university.", options: ["a", "an", "—", "two"], answer: 0, explain: "University começa com som de “iu” (consoante)." },
+          { q: "Plural de “box”:", options: ["boxs", "boxes", "boxies", "boxen"], answer: 1, explain: "Terminado em x recebe -es." },
+          { q: "Plural de “child”:", options: ["childs", "childes", "children", "childrens"], answer: 2, explain: "Plural irregular: children." },
+          { q: "Plural de “city”:", options: ["citys", "cityes", "cities", "city"], answer: 2, explain: "Consoante + y → -ies." }
+        ]
+      }
+    ]
+  },
+  {
+    id: "a2",
+    code: "A2",
+    name: "Básico",
+    description: "Rotina, passado e descrição de lugares.",
+    lessons: [
+      {
+        id: "a2-simple-present",
+        title: "Simple Present (rotina)",
+        theory: `
+          <p>Usamos o <b>Simple Present</b> para hábitos, rotinas e verdades gerais.</p>
+          <p>Com <b>he, she, it</b> o verbo ganha <b>-s</b>: I work → she <b>works</b>; go → <b>goes</b>; study → <b>studies</b>; have → <b>has</b>.</p>
+          <p><b>Negativa:</b> <i>don't</i> (I, you, we, they) / <i>doesn't</i> (he, she, it) + verbo sem -s.<br>
+          → She <b>doesn't work</b> on Sundays.</p>
+          <p><b>Pergunta:</b> <i>Do / Does</i> + sujeito + verbo.<br>
+          → <b>Does</b> he <b>play</b> soccer? <b>Do</b> you <b>like</b> pizza?</p>
+          <p>Advérbios de frequência: <b>always, usually, often, sometimes, never</b> (antes do verbo principal).</p>`,
+        vocab: [
+          ["wake up", "acordar"], ["have breakfast", "tomar café da manhã"], ["work", "trabalhar"], ["study", "estudar"],
+          ["always", "sempre"], ["usually", "geralmente"], ["sometimes", "às vezes"], ["never", "nunca"]
+        ],
+        examples: [
+          ["I usually wake up at 7 a.m.", "Eu geralmente acordo às 7 da manhã."],
+          ["He doesn't drink coffee.", "Ele não bebe café."],
+          ["Do you study English every day?", "Você estuda inglês todo dia?"]
+        ],
+        quiz: [
+          { q: "She ___ in a bank.", options: ["work", "works", "working", "is work"], answer: 1, explain: "He/She/It: verbo + s." },
+          { q: "___ they live in São Paulo?", options: ["Does", "Is", "Do", "Are"], answer: 2, explain: "They usa Do na pergunta." },
+          { q: "He ___ like vegetables.", options: ["don't", "doesn't", "isn't", "not"], answer: 1, explain: "He usa doesn't." },
+          { q: "Terceira pessoa de “study”:", options: ["studys", "studyes", "studies", "studing"], answer: 2, explain: "Consoante + y → -ies." },
+          { q: "Ordem correta:", options: ["I never eat meat.", "I eat never meat.", "Never I eat meat.", "I eat meat never."], answer: 0, explain: "Advérbio de frequência vem antes do verbo principal." }
+        ]
+      },
+      {
+        id: "a2-simple-past",
+        title: "Simple Past (passado)",
+        theory: `
+          <p>O <b>Simple Past</b> fala de ações terminadas no passado (yesterday, last week, in 2020...).</p>
+          <p><b>Verbos regulares:</b> + <b>-ed</b> → work<b>ed</b>, play<b>ed</b>, stud<b>ied</b>, stop<b>ped</b>.</p>
+          <p><b>Verbos irregulares</b> têm forma própria (precisa decorar): go → <b>went</b>, see → <b>saw</b>, eat → <b>ate</b>, have → <b>had</b>, buy → <b>bought</b>.</p>
+          <p><b>Negativa e pergunta:</b> use <b>did / didn't</b> + verbo na forma base.<br>
+          → I <b>didn't go</b> to school. <b>Did</b> you <b>see</b> the movie?</p>
+          <p>To be no passado: <b>was</b> (I, he, she, it) / <b>were</b> (you, we, they).</p>`,
+        vocab: [
+          ["yesterday", "ontem"], ["last week", "semana passada"], ["ago", "atrás"], ["went (go)", "foi (ir)"],
+          ["saw (see)", "viu (ver)"], ["bought (buy)", "comprou (comprar)"], ["ate (eat)", "comeu (comer)"], ["was / were", "era, estava"]
+        ],
+        examples: [
+          ["We watched a movie last night.", "Nós assistimos a um filme ontem à noite."],
+          ["She went to the beach two days ago.", "Ela foi à praia dois dias atrás."],
+          ["Did you buy the tickets?", "Você comprou os ingressos?"]
+        ],
+        quiz: [
+          { q: "Yesterday I ___ to the gym.", options: ["go", "goes", "went", "goed"], answer: 2, explain: "Go é irregular: went." },
+          { q: "They ___ at home last night.", options: ["was", "were", "are", "did"], answer: 1, explain: "They usa were." },
+          { q: "Did she ___ the email?", options: ["sent", "send", "sends", "sending"], answer: 1, explain: "Depois de did o verbo fica na forma base." },
+          { q: "Passado de “stop”:", options: ["stoped", "stopped", "stopt", "stopping"], answer: 1, explain: "CVC dobra a consoante: stopped." },
+          { q: "Negativa de “I ate pizza”:", options: ["I didn't ate pizza.", "I don't ate pizza.", "I didn't eat pizza.", "I wasn't eat pizza."], answer: 2, explain: "didn't + verbo base (eat)." }
+        ]
+      },
+      {
+        id: "a2-there-is",
+        title: "There is / There are e preposições de lugar",
+        theory: `
+          <p><b>There is</b> (singular) e <b>There are</b> (plural) significam <i>há / existe(m) / tem</i>.</p>
+          <ul>
+            <li>There <b>is</b> a cat on the sofa.</li>
+            <li>There <b>are</b> two chairs in the kitchen.</li>
+            <li>Pergunta: <b>Is there</b> a bank near here? <b>Are there</b> any eggs?</li>
+          </ul>
+          <p><b>Preposições de lugar:</b></p>
+          <ul>
+            <li><b>in</b> – dentro de · <b>on</b> – em cima de · <b>under</b> – embaixo de</li>
+            <li><b>next to</b> – ao lado de · <b>between</b> – entre · <b>behind</b> – atrás de</li>
+            <li><b>in front of</b> – em frente a · <b>across from</b> – do outro lado de</li>
+          </ul>`,
+        vocab: [
+          ["kitchen", "cozinha"], ["bedroom", "quarto"], ["table", "mesa"], ["near", "perto"],
+          ["next to", "ao lado de"], ["between", "entre"], ["behind", "atrás de"], ["under", "embaixo de"]
+        ],
+        examples: [
+          ["There is a pharmacy next to the bank.", "Tem uma farmácia ao lado do banco."],
+          ["Are there any restaurants near here?", "Há restaurantes aqui perto?"],
+          ["The keys are under the book.", "As chaves estão embaixo do livro."]
+        ],
+        quiz: [
+          { q: "There ___ three people in the room.", options: ["is", "are", "be", "has"], answer: 1, explain: "Plural usa there are." },
+          { q: "___ there a supermarket near here?", options: ["Are", "Has", "Is", "Do"], answer: 2, explain: "Singular: Is there...?" },
+          { q: "O gato está embaixo da mesa: “The cat is ___ the table.”", options: ["on", "under", "in", "behind"], answer: 1, explain: "Under = embaixo de." },
+          { q: "“Between” significa:", options: ["atrás", "entre", "perto", "longe"], answer: 1, explain: "Between = entre dois itens." },
+          { q: "The phone is ___ my bag (dentro).", options: ["on", "at", "in", "under"], answer: 2, explain: "In = dentro." }
+        ]
+      }
+    ]
+  },
+  {
+    id: "b1",
+    code: "B1",
+    name: "Intermediário",
+    description: "Experiências, planos futuros e comparações.",
+    lessons: [
+      {
+        id: "b1-present-perfect",
+        title: "Present Perfect",
+        theory: `
+          <p>Estrutura: <b>have / has + particípio passado</b> (worked, seen, been, done).</p>
+          <p>Usamos para:</p>
+          <ul>
+            <li><b>Experiências</b> sem tempo definido: I <b>have been</b> to Chile.</li>
+            <li>Ações que <b>começaram no passado e continuam</b>: She <b>has lived</b> here <b>for</b> 5 years / <b>since</b> 2019.</li>
+            <li>Resultados recentes: I <b>have lost</b> my keys.</li>
+          </ul>
+          <p><b>for</b> = duração (for two hours) · <b>since</b> = ponto de início (since Monday).</p>
+          <p>Palavras comuns: <b>ever, never, already, yet, just</b>.</p>
+          <p>⚠️ Com tempo definido no passado (yesterday, in 2010) use o <b>Simple Past</b>, não o Present Perfect.</p>`,
+        vocab: [
+          ["ever", "alguma vez"], ["already", "já"], ["yet", "ainda / já (em perguntas)"], ["just", "acabou de"],
+          ["since", "desde"], ["for", "por / há (duração)"], ["been (be)", "estado / ido"], ["done (do)", "feito"]
+        ],
+        examples: [
+          ["Have you ever eaten sushi?", "Você já comeu sushi alguma vez?"],
+          ["I have just finished my homework.", "Eu acabei de terminar minha lição."],
+          ["They haven't arrived yet.", "Eles ainda não chegaram."]
+        ],
+        quiz: [
+          { q: "She ___ visited London three times.", options: ["have", "has", "is", "did"], answer: 1, explain: "She usa has." },
+          { q: "I've worked here ___ 2018.", options: ["for", "since", "ago", "during"], answer: 1, explain: "Since indica o ponto de início." },
+          { q: "We've known each other ___ ten years.", options: ["since", "for", "from", "at"], answer: 1, explain: "For indica duração." },
+          { q: "Qual frase está correta?", options: ["I have seen him yesterday.", "I saw him yesterday.", "I have saw him yesterday.", "I seen him yesterday."], answer: 1, explain: "Com “yesterday” usa-se Simple Past." },
+          { q: "Have you finished ___?", options: ["already", "yet", "ever", "since"], answer: 1, explain: "Yet aparece no fim de perguntas e negativas." }
+        ]
+      },
+      {
+        id: "b1-futuro",
+        title: "Futuro: will vs going to",
+        theory: `
+          <p><b>Will + verbo</b>:</p>
+          <ul>
+            <li>Decisões tomadas na hora: <i>The phone is ringing. I'<b>ll</b> answer it.</i></li>
+            <li>Previsões baseadas em opinião: <i>I think it <b>will</b> rain.</i></li>
+            <li>Promessas e ofertas: <i>I <b>will</b> help you.</i></li>
+          </ul>
+          <p><b>Be going to + verbo</b>:</p>
+          <ul>
+            <li>Planos já decididos: <i>I'<b>m going to</b> travel next month.</i></li>
+            <li>Previsões com evidência: <i>Look at the clouds! It'<b>s going to</b> rain.</i></li>
+          </ul>
+          <p><b>Present Continuous</b> também indica compromissos marcados: <i>I'm meeting Ana tomorrow.</i></p>`,
+        vocab: [
+          ["tomorrow", "amanhã"], ["next year", "ano que vem"], ["plan", "plano / planejar"], ["promise", "promessa / prometer"],
+          ["probably", "provavelmente"], ["soon", "em breve"], ["decide", "decidir"], ["appointment", "compromisso / consulta"]
+        ],
+        examples: [
+          ["I'm going to study medicine.", "Eu vou estudar medicina."],
+          ["Don't worry, I'll call you later.", "Não se preocupe, eu te ligo depois."],
+          ["Watch out! You're going to fall!", "Cuidado! Você vai cair!"]
+        ],
+        quiz: [
+          { q: "“I'm cold.” — “I ___ close the window.” (decisão na hora)", options: ["am going to", "will", "going", "am"], answer: 1, explain: "Decisão espontânea: will." },
+          { q: "We've bought the tickets. We ___ visit Rome in May.", options: ["will", "are going to", "go", "would"], answer: 1, explain: "Plano já decidido: going to." },
+          { q: "Look at that car! It ___ crash!", options: ["will", "is going to", "crashes", "would"], answer: 1, explain: "Previsão com evidência: going to." },
+          { q: "I promise I ___ tell anyone.", options: ["won't", "am not going", "don't", "not will"], answer: 0, explain: "Promessa: will / won't." },
+          { q: "Qual expressa compromisso marcado?", options: ["I meet the doctor tomorrow at 3.", "I'm meeting the doctor tomorrow at 3.", "I will meeting the doctor.", "I meeting the doctor."], answer: 1, explain: "Present Continuous para agenda marcada." }
+        ]
+      },
+      {
+        id: "b1-comparativos",
+        title: "Comparativos e superlativos",
+        theory: `
+          <p><b>Adjetivos curtos</b> (1 sílaba ou terminados em -y):</p>
+          <ul>
+            <li>Comparativo: <b>-er + than</b> → tall<b>er than</b>, bigg<b>er than</b>, happ<b>ier than</b></li>
+            <li>Superlativo: <b>the + -est</b> → <b>the</b> tall<b>est</b>, <b>the</b> happ<b>iest</b></li>
+          </ul>
+          <p><b>Adjetivos longos</b> (2+ sílabas):</p>
+          <ul>
+            <li><b>more ... than</b> → more expensive than</li>
+            <li><b>the most ...</b> → the most expensive</li>
+          </ul>
+          <p><b>Irregulares:</b> good → better → the best · bad → worse → the worst · far → farther/further → the farthest.</p>
+          <p><b>Igualdade:</b> as ... as → <i>She is <b>as</b> tall <b>as</b> her brother.</i></p>`,
+        vocab: [
+          ["cheap", "barato"], ["expensive", "caro"], ["better", "melhor"], ["worse", "pior"],
+          ["the best", "o melhor"], ["the worst", "o pior"], ["crowded", "lotado"], ["comfortable", "confortável"]
+        ],
+        examples: [
+          ["My car is older than yours.", "Meu carro é mais velho que o seu."],
+          ["This is the most beautiful beach I've ever seen.", "Esta é a praia mais bonita que eu já vi."],
+          ["Today is not as hot as yesterday.", "Hoje não está tão quente quanto ontem."]
+        ],
+        quiz: [
+          { q: "An elephant is ___ than a horse.", options: ["big", "bigger", "more big", "biggest"], answer: 1, explain: "Curto CVC: dobra a consoante + er." },
+          { q: "This book is ___ than that one.", options: ["interestinger", "more interesting", "most interesting", "the interesting"], answer: 1, explain: "Adjetivo longo: more ... than." },
+          { q: "She is the ___ student in the class.", options: ["better", "goodest", "best", "most good"], answer: 2, explain: "Good → better → the best." },
+          { q: "Today's weather is ___ than yesterday's.", options: ["badder", "worse", "worst", "more bad"], answer: 1, explain: "Bad → worse → the worst." },
+          { q: "He is as ___ as his father.", options: ["taller", "tall", "tallest", "more tall"], answer: 1, explain: "as + adjetivo na forma normal + as." }
+        ]
+      }
+    ]
+  },
+  {
+    id: "b2",
+    code: "B2",
+    name: "Intermediário Superior",
+    description: "Condicionais, voz passiva e modais de dedução.",
+    lessons: [
+      {
+        id: "b2-condicionais",
+        title: "Condicionais 0, 1 e 2",
+        theory: `
+          <table>
+            <tr><th>Tipo</th><th>Estrutura</th><th>Uso</th></tr>
+            <tr><td>Zero</td><td>If + present, present</td><td>Verdades gerais: <i>If you heat ice, it melts.</i></td></tr>
+            <tr><td>First</td><td>If + present, will + verbo</td><td>Possibilidade real no futuro: <i>If it rains, I'll stay home.</i></td></tr>
+            <tr><td>Second</td><td>If + past, would + verbo</td><td>Situação hipotética/imaginária: <i>If I had money, I would travel.</i></td></tr>
+          </table>
+          <p>No segundo condicional, com o verbo to be é comum usar <b>were</b> para todas as pessoas: <i>If I <b>were</b> you, I'd accept the offer.</i></p>
+          <p><b>Unless</b> = if not → <i>I won't go <b>unless</b> you come.</i></p>`,
+        vocab: [
+          ["if", "se"], ["unless", "a menos que"], ["would", "(indica o “-ria”: faria, iria)"], ["offer", "oferta"],
+          ["accept", "aceitar"], ["lottery", "loteria"], ["melt", "derreter"], ["as long as", "desde que"]
+        ],
+        examples: [
+          ["If you mix blue and yellow, you get green.", "Se você mistura azul e amarelo, obtém verde."],
+          ["If I see her, I'll tell her the news.", "Se eu a vir, contarei a novidade."],
+          ["If I won the lottery, I would buy a house.", "Se eu ganhasse na loteria, compraria uma casa."]
+        ],
+        quiz: [
+          { q: "If it ___ tomorrow, we'll cancel the trip.", options: ["will rain", "rains", "rained", "would rain"], answer: 1, explain: "First conditional: if + present." },
+          { q: "If I ___ you, I would study more.", options: ["am", "was being", "were", "be"], answer: 2, explain: "“If I were you” é a forma padrão." },
+          { q: "If water reaches 100°C, it ___.", options: ["boils", "will boiled", "would boil", "boiled"], answer: 0, explain: "Zero conditional: verdade científica." },
+          { q: "If she had more time, she ___ learn Japanese.", options: ["will", "would", "does", "is"], answer: 1, explain: "Second conditional: would + verbo." },
+          { q: "“Unless you hurry, you'll miss the bus” = ", options: ["If you hurry, you'll miss the bus.", "If you don't hurry, you'll miss the bus.", "Because you hurry, you'll miss it.", "Although you hurry..."], answer: 1, explain: "Unless = if not." }
+        ]
+      },
+      {
+        id: "b2-passiva",
+        title: "Voz passiva",
+        theory: `
+          <p>Na voz passiva, o foco está na ação ou em quem a <i>recebe</i>, não em quem a faz.</p>
+          <p>Estrutura: <b>be (no tempo certo) + particípio passado</b>.</p>
+          <table>
+            <tr><th>Tempo</th><th>Ativa</th><th>Passiva</th></tr>
+            <tr><td>Present</td><td>They make cars here.</td><td>Cars <b>are made</b> here.</td></tr>
+            <tr><td>Past</td><td>Someone stole my bike.</td><td>My bike <b>was stolen</b>.</td></tr>
+            <tr><td>Present Perfect</td><td>They have fixed it.</td><td>It <b>has been fixed</b>.</td></tr>
+            <tr><td>Future</td><td>They will build a bridge.</td><td>A bridge <b>will be built</b>.</td></tr>
+            <tr><td>Modal</td><td>You must sign it.</td><td>It <b>must be signed</b>.</td></tr>
+          </table>
+          <p>Para dizer quem fez, use <b>by</b>: <i>Hamlet was written <b>by</b> Shakespeare.</i></p>`,
+        vocab: [
+          ["build / built", "construir / construído"], ["steal / stolen", "roubar / roubado"], ["write / written", "escrever / escrito"], ["invent", "inventar"],
+          ["deliver", "entregar"], ["repair", "consertar"], ["sign", "assinar"], ["by", "por (agente)"]
+        ],
+        examples: [
+          ["English is spoken all over the world.", "O inglês é falado no mundo todo."],
+          ["The package was delivered this morning.", "O pacote foi entregue hoje de manhã."],
+          ["The results will be announced tomorrow.", "Os resultados serão anunciados amanhã."]
+        ],
+        quiz: [
+          { q: "The Mona Lisa ___ by Leonardo da Vinci.", options: ["painted", "was painted", "is painting", "has paint"], answer: 1, explain: "Passado passivo: was + particípio." },
+          { q: "Coffee ___ in Brazil.", options: ["grows", "is grown", "is grow", "growing"], answer: 1, explain: "Presente passivo: is + grown." },
+          { q: "The house ___ next year.", options: ["will be built", "will built", "is build", "builds"], answer: 0, explain: "Futuro passivo: will be + particípio." },
+          { q: "My phone ___ stolen!", options: ["has been", "have been", "has be", "is being been"], answer: 0, explain: "Present Perfect passivo: has been + particípio." },
+          { q: "Passiva de “You must wear a helmet”:", options: ["A helmet must wear.", "A helmet must be worn.", "A helmet must worn.", "A helmet is must worn."], answer: 1, explain: "Modal + be + particípio." }
+        ]
+      },
+      {
+        id: "b2-modais",
+        title: "Modais de dedução e conselho",
+        theory: `
+          <p><b>Dedução no presente:</b></p>
+          <ul>
+            <li><b>must</b> – tenho certeza que sim: <i>He's been working all day. He <b>must</b> be tired.</i></li>
+            <li><b>might / may / could</b> – é possível: <i>She <b>might</b> be at home.</i></li>
+            <li><b>can't</b> – tenho certeza que não: <i>That <b>can't</b> be true!</i></li>
+          </ul>
+          <p><b>Dedução no passado:</b> modal + <b>have + particípio</b> → <i>They <b>must have left</b> early. You <b>can't have seen</b> him.</i></p>
+          <p><b>Conselho:</b> <b>should / ought to</b> → <i>You <b>should</b> see a doctor.</i><br>
+          Arrependimento/crítica: <b>should have + particípio</b> → <i>I <b>should have studied</b> more.</i></p>`,
+        vocab: [
+          ["must", "deve (certeza)"], ["might", "pode ser que"], ["can't", "não pode ser"], ["should", "deveria"],
+          ["ought to", "deveria (formal)"], ["certain", "certo, seguro"], ["guess", "palpite / adivinhar"], ["regret", "arrepender-se"]
+        ],
+        examples: [
+          ["The lights are off. They must be asleep.", "As luzes estão apagadas. Eles devem estar dormindo."],
+          ["I can't find my wallet. I might have left it at work.", "Não acho minha carteira. Posso tê-la deixado no trabalho."],
+          ["You should have told me earlier.", "Você deveria ter me contado antes."]
+        ],
+        quiz: [
+          { q: "She won the lottery! She ___ be very happy.", options: ["can't", "must", "should", "mustn't"], answer: 1, explain: "Dedução com certeza: must." },
+          { q: "He's in Japan now, so the man you saw ___ be him.", options: ["must", "can't", "might", "should"], answer: 1, explain: "Certeza negativa: can't." },
+          { q: "I'm not sure where Ana is. She ___ be in the library.", options: ["must", "can't", "might", "ought"], answer: 2, explain: "Possibilidade: might." },
+          { q: "The ground is wet. It ___ rained last night.", options: ["must have", "must", "should", "can't have"], answer: 0, explain: "Dedução no passado: must have + particípio." },
+          { q: "I failed the test. I ___ more.", options: ["should study", "should have studied", "must study", "might studied"], answer: 1, explain: "Arrependimento: should have + particípio." }
+        ]
+      }
+    ]
+  },
+  {
+    id: "c1",
+    code: "C1",
+    name: "Avançado",
+    description: "Hipóteses no passado, discurso indireto e phrasal verbs.",
+    lessons: [
+      {
+        id: "c1-terceiro-condicional",
+        title: "Terceiro condicional e condicionais mistos",
+        theory: `
+          <p><b>Third conditional</b> – fala de um passado que não aconteceu (arrependimento, hipótese):</p>
+          <p><b>If + past perfect, would have + particípio</b><br>
+          → <i>If I <b>had left</b> earlier, I <b>would have caught</b> the train.</i></p>
+          <p><b>Mixed conditionals</b> – misturam tempos:</p>
+          <ul>
+            <li>Passado → consequência presente: <i>If I <b>had studied</b> medicine, I <b>would be</b> a doctor now.</i></li>
+            <li>Característica presente → consequência passada: <i>If I <b>were</b> braver, I <b>would have spoken</b> up.</i></li>
+          </ul>
+          <p><b>I wish / If only</b> + past perfect = arrependimento sobre o passado: <i>I wish I <b>had listened</b> to you.</i></p>`,
+        vocab: [
+          ["regret", "arrependimento"], ["miss (a train)", "perder (um trem)"], ["if only", "quem dera / se ao menos"], ["wish", "desejar"],
+          ["outcome", "resultado"], ["otherwise", "caso contrário"], ["speak up", "manifestar-se"], ["chance", "oportunidade"]
+        ],
+        examples: [
+          ["If you had told me, I would have helped you.", "Se você tivesse me contado, eu teria te ajudado."],
+          ["If she hadn't missed the flight, she would be here now.", "Se ela não tivesse perdido o voo, estaria aqui agora."],
+          ["I wish I had taken that job.", "Eu queria ter aceitado aquele emprego."]
+        ],
+        quiz: [
+          { q: "If I ___ about the party, I would have gone.", options: ["knew", "had known", "would know", "have known"], answer: 1, explain: "Third conditional: if + past perfect." },
+          { q: "If we had taken a taxi, we ___ on time.", options: ["would arrive", "would have arrived", "will arrive", "had arrived"], answer: 1, explain: "would have + particípio." },
+          { q: "If I had saved money, I ___ rich now.", options: ["would have been", "would be", "will be", "had been"], answer: 1, explain: "Misto: passado → consequência presente." },
+          { q: "I wish I ___ so rude yesterday.", options: ["wasn't", "hadn't been", "wouldn't be", "am not"], answer: 1, explain: "Arrependimento sobre passado: wish + past perfect." },
+          { q: "Qual frase está correta?", options: ["If he would have called, I would have answered.", "If he had called, I would have answered.", "If he called, I would have answer.", "If he has called, I would answered."], answer: 1, explain: "Não se usa would na oração com if." }
+        ]
+      },
+      {
+        id: "c1-reported-speech",
+        title: "Discurso indireto (Reported Speech)",
+        theory: `
+          <p>Ao relatar o que alguém disse, geralmente “recuamos” um tempo verbal (<i>backshift</i>):</p>
+          <table>
+            <tr><th>Direto</th><th>Indireto</th></tr>
+            <tr><td>“I <b>am</b> tired.”</td><td>She said (that) she <b>was</b> tired.</td></tr>
+            <tr><td>“I <b>worked</b> late.”</td><td>He said he <b>had worked</b> late.</td></tr>
+            <tr><td>“I <b>will</b> call.”</td><td>She said she <b>would</b> call.</td></tr>
+            <tr><td>“I <b>can</b> swim.”</td><td>He said he <b>could</b> swim.</td></tr>
+          </table>
+          <p>Também mudam referências: <i>today → that day, tomorrow → the next day, here → there, this → that</i>.</p>
+          <p><b>Perguntas</b> viram ordem de afirmação: “Where do you live?” → She asked me <b>where I lived</b>. Sim/não usa <b>if / whether</b>: He asked <b>if</b> I was ready.</p>
+          <p><b>Say</b> vs <b>tell</b>: <i>say (something)</i>, mas <i>tell <b>someone</b> (something)</i>.</p>`,
+        vocab: [
+          ["say / said", "dizer / disse"], ["tell / told", "contar, dizer a alguém"], ["ask", "perguntar / pedir"], ["whether", "se (alternativa)"],
+          ["claim", "alegar"], ["admit", "admitir"], ["deny", "negar"], ["suggest", "sugerir"]
+        ],
+        examples: [
+          ["She told me she was moving to Canada.", "Ela me disse que estava se mudando para o Canadá."],
+          ["He asked whether I had finished the report.", "Ele perguntou se eu tinha terminado o relatório."],
+          ["They said they would come the next day.", "Eles disseram que viriam no dia seguinte."]
+        ],
+        quiz: [
+          { q: "“I'm hungry,” he said. → He said he ___ hungry.", options: ["is", "was", "has been", "will be"], answer: 1, explain: "am/is → was." },
+          { q: "“I will help you.” → She said she ___ help me.", options: ["will", "would", "can", "had"], answer: 1, explain: "will → would." },
+          { q: "“Where do you work?” → He asked me where ___.", options: ["do I work", "I worked", "did I work", "I do work"], answer: 1, explain: "Pergunta indireta usa ordem de afirmação + backshift." },
+          { q: "She ___ me that she was leaving.", options: ["said", "told", "spoke", "asked"], answer: 1, explain: "Tell + pessoa." },
+          { q: "“I saw the movie.” → He said he ___ the movie.", options: ["saw", "has seen", "had seen", "sees"], answer: 2, explain: "Past simple → past perfect." }
+        ]
+      },
+      {
+        id: "c1-phrasal-verbs",
+        title: "Phrasal verbs essenciais",
+        theory: `
+          <p><b>Phrasal verbs</b> são verbos + partícula (preposição/advérbio) que ganham um significado novo, muitas vezes impossível de adivinhar.</p>
+          <ul>
+            <li><b>Separáveis</b>: o objeto pode ficar no meio → <i>Turn <b>the TV</b> off / Turn off the TV</i>. Com pronome, ele <b>deve</b> ficar no meio: <i>Turn <b>it</b> off</i> (nunca “turn off it”).</li>
+            <li><b>Inseparáveis</b>: <i>look after the kids</i>, <i>run into an old friend</i>.</li>
+            <li><b>De três partes</b>: <i>look forward to, put up with, come up with, get along with</i>.</li>
+          </ul>
+          <p>Dica: aprenda-os em contexto (frases completas), não em listas soltas.</p>`,
+        vocab: [
+          ["give up", "desistir"], ["find out", "descobrir"], ["put off", "adiar"], ["run out of", "ficar sem"],
+          ["come up with", "ter (uma ideia)"], ["put up with", "tolerar, aguentar"], ["look forward to", "aguardar ansiosamente"], ["get along with", "se dar bem com"]
+        ],
+        examples: [
+          ["We've run out of milk.", "Acabou o leite."],
+          ["Don't give up on your dreams.", "Não desista dos seus sonhos."],
+          ["I'm looking forward to seeing you.", "Estou ansioso para te ver."]
+        ],
+        quiz: [
+          { q: "The meeting was ___ until next week. (adiada)", options: ["put off", "put up", "put on", "put out"], answer: 0, explain: "Put off = adiar." },
+          { q: "She ___ a brilliant idea.", options: ["came up with", "came across", "came down", "came off"], answer: 0, explain: "Come up with = ter/criar uma ideia." },
+          { q: "Qual está correta?", options: ["Turn off it.", "Turn it off.", "Turn of it.", "It turn off."], answer: 1, explain: "Pronome fica no meio do phrasal separável." },
+          { q: "I can't ___ this noise anymore! (aguentar)", options: ["put up with", "get over", "look into", "go off"], answer: 0, explain: "Put up with = tolerar." },
+          { q: "I'm looking forward to ___ you.", options: ["see", "seeing", "saw", "to see"], answer: 1, explain: "Look forward to é seguido de verbo com -ing (o “to” é preposição)." }
+        ]
+      }
+    ]
+  },
+  {
+    id: "c2",
+    code: "C2",
+    name: "Proficiente",
+    description: "Estruturas sofisticadas, inversão, subjuntivo e expressões idiomáticas.",
+    lessons: [
+      {
+        id: "c2-inversao",
+        title: "Inversão para ênfase",
+        theory: `
+          <p>Em inglês formal ou enfático, algumas expressões negativas/restritivas no início da frase causam <b>inversão</b> (verbo auxiliar antes do sujeito, como numa pergunta).</p>
+          <ul>
+            <li><b>Never</b> have I seen such a mess.</li>
+            <li><b>Rarely / Seldom</b> does he complain.</li>
+            <li><b>Not only</b> did she win, <b>but</b> she also broke the record.</li>
+            <li><b>No sooner</b> had I arrived <b>than</b> it started to rain.</li>
+            <li><b>Hardly</b> had we sat down <b>when</b> the phone rang.</li>
+            <li><b>Only after</b> the meeting did I understand.</li>
+            <li><b>Under no circumstances</b> should you open this door.</li>
+          </ul>
+          <p>Inversão condicional (sem “if”): <b>Had I known</b>, I would have helped. <b>Should you need</b> anything, call me. <b>Were I</b> in your position...</p>`,
+        vocab: [
+          ["seldom", "raramente"], ["no sooner ... than", "mal ... e já"], ["hardly ... when", "mal ... quando"], ["under no circumstances", "em hipótese alguma"],
+          ["not until", "só quando"], ["little did I know", "mal sabia eu"], ["by no means", "de modo algum"], ["on no account", "de jeito nenhum"]
+        ],
+        examples: [
+          ["Little did they know what was about to happen.", "Mal sabiam eles o que estava prestes a acontecer."],
+          ["Not until I left home did I appreciate my parents.", "Só quando saí de casa valorizei meus pais."],
+          ["Should you have any questions, please contact us.", "Caso tenha alguma dúvida, entre em contato."]
+        ],
+        quiz: [
+          { q: "Never ___ such a beautiful sunset.", options: ["I have seen", "have I seen", "I saw", "seen I have"], answer: 1, explain: "Never no início → inversão: have I seen." },
+          { q: "No sooner had we left ___ it began to snow.", options: ["when", "than", "that", "then"], answer: 1, explain: "No sooner ... than." },
+          { q: "___ I known, I would have come earlier.", options: ["If", "Had", "Have", "Would"], answer: 1, explain: "Had I known = If I had known." },
+          { q: "Not only ___ late, but he also forgot the documents.", options: ["he arrived", "did he arrive", "he did arrive", "arrived he"], answer: 1, explain: "Not only no início → did he arrive." },
+          { q: "Under no circumstances ___ the password with anyone.", options: ["you should share", "should you share", "you share", "share you"], answer: 1, explain: "Expressão negativa no início → should you share." }
+        ]
+      },
+      {
+        id: "c2-subjuntivo",
+        title: "Subjuntivo e estruturas formais",
+        theory: `
+          <p><b>Subjuntivo</b>: depois de verbos/adjetivos de exigência ou recomendação, usa-se o verbo na <b>forma base</b> (sem -s, sem tempo):</p>
+          <ul>
+            <li>The doctor <b>recommended</b> that he <b>rest</b>. (não “rests”)</li>
+            <li>It is <b>essential</b> that she <b>be</b> present.</li>
+            <li>Verbos comuns: <i>suggest, insist, demand, require, recommend, propose</i>.</li>
+          </ul>
+          <p><b>Estruturas com passado “irreal”:</b></p>
+          <ul>
+            <li><b>It's (high) time</b> + past: <i>It's high time we <b>left</b>.</i> (já passou da hora)</li>
+            <li><b>I'd rather</b> + pessoa + past: <i>I'd rather you <b>didn't smoke</b> here.</i></li>
+            <li><b>As if / as though</b>: <i>He talks as if he <b>were</b> the boss.</i></li>
+          </ul>`,
+        vocab: [
+          ["insist", "insistir"], ["demand", "exigir"], ["require", "exigir, requerer"], ["essential", "essencial"],
+          ["it's high time", "já passou da hora"], ["I'd rather", "eu preferiria"], ["as though", "como se"], ["propose", "propor"]
+        ],
+        examples: [
+          ["The manager insisted that everyone attend the meeting.", "O gerente insistiu que todos comparecessem à reunião."],
+          ["It's high time you found a job.", "Já passou da hora de você arrumar um emprego."],
+          ["I'd rather you stayed here tonight.", "Eu preferiria que você ficasse aqui esta noite."]
+        ],
+        quiz: [
+          { q: "The teacher suggested that he ___ harder.", options: ["studies", "study", "studied", "to study"], answer: 1, explain: "Subjuntivo: forma base após suggest that." },
+          { q: "It is vital that every employee ___ informed.", options: ["is", "be", "was", "being"], answer: 1, explain: "Subjuntivo de to be: be." },
+          { q: "It's high time we ___ home.", options: ["go", "went", "will go", "have gone"], answer: 1, explain: "It's high time + past." },
+          { q: "I'd rather you ___ tell anyone.", options: ["don't", "didn't", "won't", "not"], answer: 1, explain: "I'd rather + pessoa + past." },
+          { q: "She acts as if she ___ the owner.", options: ["is being", "were", "be", "has"], answer: 1, explain: "As if + were (situação irreal)." }
+        ]
+      },
+      {
+        id: "c2-idioms",
+        title: "Expressões idiomáticas e nuances",
+        theory: `
+          <p>No nível proficiente, o desafio é soar natural. Isso envolve <b>idioms</b> (expressões cujo sentido não é literal) e <b>collocations</b> (palavras que “combinam” naturalmente).</p>
+          <p><b>Idioms comuns:</b></p>
+          <ul>
+            <li><b>a blessing in disguise</b> – há males que vêm para bem</li>
+            <li><b>to cut corners</b> – fazer algo de qualquer jeito para economizar</li>
+            <li><b>to beat around the bush</b> – enrolar, não ir direto ao ponto</li>
+            <li><b>the last straw</b> – a gota d'água</li>
+            <li><b>to be on the fence</b> – estar em cima do muro</li>
+            <li><b>to hit the nail on the head</b> – acertar em cheio</li>
+          </ul>
+          <p><b>Collocations:</b> <i>make</i> a decision (não “do”), <i>do</i> homework, <i>heavy</i> rain (não “strong”), <i>strong</i> coffee, <i>take</i> a risk, <i>pay</i> attention.</p>`,
+        vocab: [
+          ["a piece of cake", "moleza, muito fácil"], ["break the ice", "quebrar o gelo"], ["once in a blue moon", "muito raramente"], ["the last straw", "a gota d'água"],
+          ["on the fence", "em cima do muro"], ["cut corners", "fazer nas coxas"], ["spill the beans", "dar com a língua nos dentes"], ["under the weather", "indisposto, meio doente"]
+        ],
+        examples: [
+          ["Losing that job was a blessing in disguise.", "Perder aquele emprego foi um mal que veio para bem."],
+          ["Stop beating around the bush and tell me the truth.", "Pare de enrolar e me diga a verdade."],
+          ["I'm feeling a bit under the weather today.", "Estou me sentindo meio indisposto hoje."]
+        ],
+        quiz: [
+          { q: "“The exam was a piece of cake” significa:", options: ["O exame foi difícil.", "O exame foi muito fácil.", "O exame foi longo.", "Comeram bolo no exame."], answer: 1, explain: "A piece of cake = algo muito fácil." },
+          { q: "Qual collocation está correta?", options: ["do a decision", "make a decision", "take a decision homework", "have a decision"], answer: 1, explain: "Make a decision." },
+          { q: "“We only eat out once in a blue moon.”", options: ["Comemos fora toda semana.", "Comemos fora muito raramente.", "Comemos fora à noite.", "Nunca comemos fora."], answer: 1, explain: "Once in a blue moon = muito raramente." },
+          { q: "There was very ___ rain last night.", options: ["strong", "heavy", "big", "hard-working"], answer: 1, explain: "Collocation: heavy rain." },
+          { q: "“You hit the nail on the head” quer dizer:", options: ["Você se machucou.", "Você acertou em cheio.", "Você exagerou.", "Você está atrasado."], answer: 1, explain: "Hit the nail on the head = acertar exatamente." }
+        ]
+      }
+    ]
+  }
+];
