@@ -132,6 +132,32 @@ function toast(html, type = "") {
   setTimeout(() => el.remove(), 3700);
 }
 
+// Janela de confirmação dentro da página (substitui o confirm() do navegador).
+function ask(message, okLabel = "Confirmar") {
+  return new Promise(resolve => {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-backdrop";
+    overlay.innerHTML = `
+      <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="modal-text">
+        <p id="modal-text">${esc(message)}</p>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-answer="no">Cancelar</button>
+          <button class="btn btn-primary" type="button" data-answer="yes">${esc(okLabel)}</button>
+        </div>
+      </div>`;
+    const close = answer => { overlay.remove(); document.removeEventListener("keydown", onKey, true); resolve(answer); };
+    const onKey = e => { if (e.key === "Escape") { e.stopPropagation(); close(false); } };
+    overlay.addEventListener("click", e => {
+      if (e.target === overlay) return close(false);
+      const b = e.target.closest("[data-answer]");
+      if (b) close(b.dataset.answer === "yes");
+    });
+    document.addEventListener("keydown", onKey, true);
+    document.body.appendChild(overlay);
+    overlay.querySelector("[data-answer=yes]").focus();
+  });
+}
+
 function confetti() {
   const canvas = document.getElementById("confetti");
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -611,8 +637,8 @@ function renderPractice(id) {
   const $pbar = document.getElementById("pbar");
   const $combo = document.getElementById("combo");
 
-  document.getElementById("quit").addEventListener("click", () => {
-    if (index === 0 || confirm("Sair agora? O progresso desta prática será perdido.")) location.hash = `#/licao/${lesson.id}`;
+  document.getElementById("quit").addEventListener("click", async () => {
+    if (index === 0 || await ask("Sair agora? O progresso desta prática será perdido.", "Sair")) location.hash = `#/licao/${lesson.id}`;
   });
 
   const setReady = ready => { if (phase === "answer") $action.disabled = !ready; };
@@ -667,6 +693,7 @@ function renderPractice(id) {
   });
 
   keyHandler = e => {
+    if (document.querySelector(".modal-backdrop")) return;
     if (e.target.matches("input") && e.key !== "Enter") return;
     if (e.key === "Enter" && !$action.disabled && !$action.hidden) { e.preventDefault(); $action.click(); return; }
     if (phase === "answer" && /^[1-9]$/.test(e.key)) {
@@ -974,15 +1001,15 @@ function renderProfile() {
     catch (e) { toast("Selecione e copie o código manualmente."); }
   });
   document.getElementById("reset").addEventListener("click", async () => {
-    if (!confirm("Zerar XP, sequência, conquistas e lições concluídas?")) return;
+    if (!await ask("Zerar XP, sequência, conquistas e lições concluídas?", "Zerar")) return;
     try { apply(await backend.reset()); toast("Progresso zerado."); renderProfile(); }
     catch (err) { toast(esc(err.message), "bad"); }
   });
-  document.getElementById("logout").addEventListener("click", () => {
+  document.getElementById("logout").addEventListener("click", async () => {
     const msg = backend.mode === "server"
       ? "Sair deste aparelho? Guarde seu código de acesso para entrar de novo."
       : "Sair? No modo offline seu progresso será apagado deste navegador.";
-    if (!confirm(msg)) return;
+    if (!await ask(msg, "Sair")) return;
     backend.logout();
     S = null;
     renderStats();
