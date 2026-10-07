@@ -48,6 +48,7 @@ function public_user(array $user): array
         'streak' => $streak,
         'bestStreak' => (int) $user['best_streak'],
         'studiedToday' => $user['last_day'] === date('Y-m-d'),
+        'lastDay' => $user['last_day'],
     ];
 }
 
@@ -157,6 +158,54 @@ try {
 
             $state['achievements'] = array_values(array_unique([...$state['achievements'], ...$new]));
             respond($state + ['result' => ['score' => $score, 'total' => $total, 'passed' => $passed, 'xp' => $xp, 'newAchievements' => $new]]);
+        }
+
+        case 'restore': {
+            // Recria uma conta a partir da cópia guardada no navegador, quando o banco do
+            // servidor foi apagado (hospedagens com disco temporário).
+            if ($method !== 'POST') respond(['error' => 'Use POST.'], 405);
+            $token = $_SERVER['HTTP_X_TOKEN'] ?? '';
+            if (!preg_match('/^[a-f0-9]{32}$/', $token)) respond(['error' => 'Sessão inválida.'], 401);
+            $stmt = db()->prepare('SELECT * FROM users WHERE token = ?');
+            $stmt->execute([$token]);
+            if ($existing = $stmt->fetch()) respond(user_state($existing));
+
+            $backup = input()['backup'] ?? null;
+            $u = is_array($backup) ? ($backup['user'] ?? null) : null;
+            $name = is_array($u) ? trim(preg_replace('/\s+/u', ' ', (string) ($u['name'] ?? ''))) : '';
+            if (mb_strlen($name) < 2 || mb_strlen($name) > 24) respond(['error' => 'Cópia inválida.'], 422);
+            $lastDay = is_string($u['lastDay'] ?? null) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $u['lastDay']) ? $u['lastDay'] : null;
+            $streak = max(0, min(3650, (int) ($u['streak'] ?? 0)));
+            $bestStreak = max($streak, min(3650, (int) ($u['bestStreak'] ?? 0)));
+
+            $lessons = lessons_by_id();
+            $progress = [];
+            $maxXp = 0;
+            foreach ((array) ($backup['progress'] ?? []) as $id => $p) {
+                if (!isset($lessons[$id]) || !is_array($p)) continue;
+                $total = lesson_total($lessons[$id]['lesson']);
+                $progress[$id] = [max(0, min($total, (int) ($p['best'] ?? 0))), $total];
+            }
+            // O XP não pode passar do que é possível ganhar repetindo as lições salvas.
+            foreach ($progress as [$best, $total]) $maxXp += ($total * 10 + 70) * 50;
+            $xp = max(0, min($maxXp, (int) ($u['xp'] ?? 0)));
+            $catalog = achievement_catalog();
+            $codes = array_values(array_filter((array) ($backup['achievements'] ?? []), fn($c) => is_string($c) && isset($catalog[$c])));
+
+            $pdo = db();
+            $pdo->beginTransaction();
+            $pdo->prepare('INSERT INTO users (name, token, xp, streak, best_streak, last_day) VALUES (?, ?, ?, ?, ?, ?)')
+                ->execute([$name, $token, $xp, $streak, $bestStreak, $lastDay]);
+            $id = (int) $pdo->lastInsertId();
+            $ins = $pdo->prepare('INSERT INTO progress (user_id, lesson_id, best_score, total) VALUES (?, ?, ?, ?)');
+            foreach ($progress as $lessonId => [$best, $total]) $ins->execute([$id, $lessonId, $best, $total]);
+            $ins = $pdo->prepare('INSERT OR IGNORE INTO achievements (user_id, code) VALUES (?, ?)');
+            foreach ($codes as $code) $ins->execute([$id, $code]);
+            $pdo->commit();
+
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
+            $stmt->execute([$id]);
+            respond(user_state($stmt->fetch()));
         }
 
         case 'ranking': {

@@ -40,6 +40,10 @@ function db(): PDO
         return $pdo;
     }
     $path = getenv('INGLES_DB_PATH') ?: __DIR__ . '/../data/ingles.sqlite';
+    if (!is_writable(dirname($path))) {
+        // Hospedagens sem disco gravável (como a Vercel) só permitem gravar na pasta temporária.
+        $path = sys_get_temp_dir() . '/ingles.sqlite';
+    }
     $pdo = new PDO('sqlite:' . $path, null, null, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

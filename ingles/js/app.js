@@ -219,7 +219,18 @@ class ApiError extends Error {
 const serverBackend = {
   mode: "server",
   token: store.get("ingles-token", null),
-  async call(action, body) {
+  async call(action, body, retried = false) {
+    try {
+      return await this.request(action, body);
+    } catch (err) {
+      // Conta sumiu do servidor (banco temporário apagado): recria a partir da cópia local e tenta de novo.
+      const backup = store.get("ingles-cache", null);
+      if (err.status !== 401 || retried || !this.token || !backup || action === "register" || action === "restore") throw err;
+      await this.request("restore", { backup });
+      return this.call(action, body, true);
+    }
+  },
+  async request(action, body) {
     let res;
     try {
       res = await fetch(`api.php?action=${action}`, {
@@ -243,7 +254,7 @@ const serverBackend = {
   complete(lessonId, score) { return this.call("complete", { lessonId, score }); },
   ranking() { return this.call("ranking"); },
   reset() { return this.call("reset", {}); },
-  logout() { this.token = null; store.del("ingles-token"); }
+  logout() { this.token = null; store.del("ingles-token"); store.del("ingles-cache"); }
 };
 
 // Mesmas regras de api.php, guardadas só neste navegador (quando o PHP não está disponível).
@@ -315,6 +326,7 @@ let S = null; // { user, progress, achievements }
 function apply(data) {
   const oldXp = S ? S.user.xp : null;
   S = { user: data.user, progress: data.progress, achievements: data.achievements };
+  if (backend === serverBackend) store.set("ingles-cache", S);
   renderStats(oldXp !== null && oldXp !== S.user.xp);
 }
 
@@ -407,7 +419,7 @@ function renderOnboarding(note = "") {
     const code = document.getElementById("code").value.trim().toLowerCase();
     serverBackend.token = code;
     try {
-      const data = await serverBackend.me();
+      const data = await serverBackend.request("me");
       store.set("ingles-token", code);
       backend = serverBackend;
       apply(data);
