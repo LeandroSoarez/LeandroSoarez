@@ -84,6 +84,16 @@ function db(): PDO
         earned_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id, code)
     )');
+    // Histórico de cada lição concluída (alimenta o painel de acompanhamento).
+    $pdo->exec('CREATE TABLE IF NOT EXISTS attempts (
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        lesson_id TEXT NOT NULL,
+        score INTEGER NOT NULL,
+        total INTEGER NOT NULL,
+        xp INTEGER NOT NULL,
+        created_at TEXT NOT NULL
+    )');
+    $pdo->exec('CREATE INDEX IF NOT EXISTS attempts_user ON attempts (user_id, created_at)');
     return $pdo;
 }
 

@@ -1,11 +1,28 @@
 {
   "functions": {
-    "api/*.php": { "runtime": "vercel-php@0.9.0" }
+    "api/*.php": {
+      "runtime": "vercel-php@0.9.0"
+    }
   },
   "routes": [
-    { "src": "/", "dest": "/api/index.php" },
-    { "src": "/api\\.php", "dest": "/api/api.php" },
-    { "src": "/(index\\.php|api/.*|lib/.*|data/.*|README\\.md|vercel\\.json)", "status": 404 },
-    { "handle": "filesystem" }
+    {
+      "src": "/",
+      "dest": "/api/index.php"
+    },
+    {
+      "src": "/api\\.php",
+      "dest": "/api/api.php"
+    },
+    {
+      "src": "/painel/?",
+      "dest": "/api/painel.php"
+    },
+    {
+      "src": "/(index\\.php|painel\\.php|api/.*|lib/.*|data/.*|README\\.md|vercel\\.json)",
+      "status": 404
+    },
+    {
+      "handle": "filesystem"
+    }
   ]
 }

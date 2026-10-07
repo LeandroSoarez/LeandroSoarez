@@ -138,6 +138,9 @@ try {
                 total = excluded.total, attempts = progress.attempts + 1, updated_at = CURRENT_TIMESTAMP')
                 ->execute([$user['id'], $lessonId, $score, $total]);
 
+            $pdo->prepare('INSERT INTO attempts (user_id, lesson_id, score, total, xp, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+                ->execute([$user['id'], $lessonId, $score, $total, $xp, gmdate('Y-m-d H:i:s')]);
+
             $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
             $stmt->execute([$user['id']]);
             $user = $stmt->fetch();
@@ -232,6 +235,7 @@ try {
             $pdo = db();
             $pdo->prepare('DELETE FROM progress WHERE user_id = ?')->execute([$user['id']]);
             $pdo->prepare('DELETE FROM achievements WHERE user_id = ?')->execute([$user['id']]);
+            $pdo->prepare('DELETE FROM attempts WHERE user_id = ?')->execute([$user['id']]);
             $pdo->prepare('UPDATE users SET xp = 0, streak = 0, last_day = NULL WHERE id = ?')->execute([$user['id']]);
             $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
             $stmt->execute([$user['id']]);
