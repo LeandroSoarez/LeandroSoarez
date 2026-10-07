@@ -209,6 +209,11 @@ try {
             respond(user_state($stmt->fetch()));
         }
 
+        case 'health':
+            // Diz qual banco está em uso (útil para conferir a hospedagem).
+            db()->query('SELECT 1');
+            respond(['ok' => true, 'database' => db()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql' ? 'postgres' : 'sqlite']);
+
         case 'ranking': {
             $rows = db()->query('SELECT token, name, xp, streak, last_day FROM users WHERE xp > 0 ORDER BY xp DESC, id ASC LIMIT 20')->fetchAll();
             $yesterday = date('Y-m-d', strtotime('-1 day'));
